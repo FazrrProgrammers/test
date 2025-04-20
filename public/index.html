@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DDoS Test Monitor</title>
+  <style>
+    body {
+      font-family: monospace;
+      background: #000;
+      color: #0f0;
+      padding: 20px;
+    }
+    h1 {
+      color: #0ff;
+    }
+    pre {
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>DDoS Monitor (Vercel Version)</h1>
+  <div id="logs"></div>
+
+  <script>
+    async function fetchLogs() {
+      try {
+        const res = await fetch('/api/logs');
+        const data = await res.json();
+        const logHtml = data.map(log =>
+          `[${log.time}] ${log.ip} - ${log.method}`
+        ).join('<br>');
+        document.getElementById('logs').innerHTML = logHtml;
+      } catch (err) {
+        console.error('Failed to fetch logs:', err);
+      }
+    }
+
+    setInterval(fetchLogs, 1000); // refresh every second
+    fetchLogs(); // initial load
+  </script>
+</body>
+</html>
